@@ -4,7 +4,7 @@
 
 const Hero = require('./game-models/Hero');
 const Enemy = require('./game-models/Enemy');
-// const Boomerang = require('./game-models/Boomerang');
+const Boomerang = require('./game-models/Boomerang');
 const View = require('./View');
 
 // Основной класс игры.
@@ -16,6 +16,7 @@ class Game {
     this.hero = new Hero(); // Герою можно аргументом передать бумеранг.
     this.enemy = new Enemy();
     this.view = new View();
+    this.boomerang = new Boomerang();
     this.track = [];
     this.regenerateTrack();
   }
@@ -25,13 +26,23 @@ class Game {
     // в единую структуру данных
     this.track = (new Array(this.trackLength)).fill(' ');
     this.track[this.hero.position] = this.hero.skin;
+    this.track[this.enemy.position] = this.enemy.skin;
+    this.track[this.boomerang.position] = this.boomerang.skin;
   }
 
   check() {
     if (this.hero.position === this.enemy.position) {
       this.hero.die();
+    } 
+    // if (this.enemy.position === this.boomerang.position ) {
+    //   this.enemy.die()
+    //   process.exit();
+    //   };
+      // if(this.enemy.position === ) {
+      //   this.enemy.die();
+       
+      // }
     }
-  }
 
   play() {
     setInterval(() => {
@@ -39,7 +50,7 @@ class Game {
       this.check();
       this.regenerateTrack();
       this.view.render(this.track);
-    });
+    }, 200); // тут время чтоб не дергалось)
   }
 }
 
