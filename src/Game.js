@@ -38,8 +38,10 @@ class Game {
       // Let's play!
       this.check();
       this.regenerateTrack();
+      this.enemy. generateSkin()
       this.view.render(this.track);
-    });
+      this.keyboard.runInteractiveConsole()
+    },1000);
   }
 }
 

@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  user.init({name: {
+  user.init({
+    name: {
     type: Sequelize.TEXT,
     allowNull: false,
   },
