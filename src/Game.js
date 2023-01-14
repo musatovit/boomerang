@@ -9,7 +9,21 @@ const View = require('./View');
 
 // Основной класс игры.
 // Тут будут все настройки, проверки, запуск.
-const {User} = require('../DB/models');
+
+
+const { Sequelize, sequelize, user } = require('../db/models');
+const DB = require('../DB/models');
+
+(async () => {
+  try {
+    await DB.sequelize.authenticate();
+    console.log('Connection successfully.');
+  } catch (error) {
+    console.error(error);
+  }
+})();
+
+
 
 class Game {
   constructor({ trackLength, count = 0, name  }) {
@@ -31,45 +45,21 @@ class Game {
     this.track[this.hero.position] = this.hero.skin;
   }
 
-  async givi() {
-    try {
-      const user = await User.create({ name: this.name, scores: this.count });
-      console.clear();
-    } catch (error) {
-      console.log(error);
-    }
+  async name() {
+    const res = await DB.user.findOrCreate({
+      where: { name: `${process.argv[2]}` },
+      defaults: { user: this.hero.score },
+    });
+    return res;
   }
 
-  async addResult() {
-    try {
-      const result = await User.findAll();
-      const filter = result.filter((el) => el.name === this.name);
-      if (filter.length > 0) {
-        const scores = await User.findOne({
-          where: {
-            name: this.name,
-          },
-        });
-        scores.scores = this.count;
-        await scores.save();
-        console.clear();
-        console.log('name: ', scores.nickname);
-        console.log('scores: ', scores.scores);
-      } else {
-        await this.givi();
-        const finalResult = await User.findOne({
-          where: {
-            name: this.name,
-          },
-        });
-        console.clear();
-        console.log('name: ', finalResult.nickname);
-        console.log('scores: ', finalResult.scores);
-        console.log('try again!');
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  async update() {
+    const result = await DB.user.update(
+      { score: this.hero.score }, 
+      { where: { name: `${process.argv[2]}` } }, 
+    );
+    return result;
+  }
 
 
 
