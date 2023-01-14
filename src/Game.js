@@ -9,15 +9,19 @@ const View = require('./View');
 
 // Основной класс игры.
 // Тут будут все настройки, проверки, запуск.
+const {User} = require('../DB/models');
 
 class Game {
-  constructor({ trackLength }) {
+  constructor({ trackLength, count = 0, name  }) {
     this.trackLength = trackLength;
     this.hero = new Hero(); // Герою можно аргументом передать бумеранг.
     this.enemy = new Enemy();
     this.view = new View();
     this.track = [];
     this.regenerateTrack();
+    this.count= count
+    this.name= name;
+
   }
 
   regenerateTrack() {
@@ -26,6 +30,48 @@ class Game {
     this.track = (new Array(this.trackLength)).fill(' ');
     this.track[this.hero.position] = this.hero.skin;
   }
+
+  async givi() {
+    try {
+      const user = await User.create({ name: this.name, scores: this.count });
+      console.clear();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async addResult() {
+    try {
+      const result = await User.findAll();
+      const filter = result.filter((el) => el.name === this.name);
+      if (filter.length > 0) {
+        const scores = await User.findOne({
+          where: {
+            name: this.name,
+          },
+        });
+        scores.scores = this.count;
+        await scores.save();
+        console.clear();
+        console.log('name: ', scores.nickname);
+        console.log('scores: ', scores.scores);
+      } else {
+        await this.givi();
+        const finalResult = await User.findOne({
+          where: {
+            name: this.name,
+          },
+        });
+        console.clear();
+        console.log('name: ', finalResult.nickname);
+        console.log('scores: ', finalResult.scores);
+        console.log('try again!');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+
 
   check() {
     if (this.hero.position === this.enemy.position) {
