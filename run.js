@@ -4,15 +4,10 @@ const Game = require('./src/Game');
 const db = require('./db/models');
 const { Sequelize } = require('sequelize');
 
-// Инициализация игры с настройками.
-
-
-
-
 const game = new Game({
-  trackLength: 30,
+    trackLength: 30,
+    position: 0
 });
-
 
 // Запуск игры.
 game.play();

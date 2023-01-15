@@ -1,9 +1,9 @@
 // Враг.
 
 class Enemy {
-  constructor() {
+  constructor(trackLength) {
     this.generateSkin();
-    this.position = 2;
+    this.position = trackLength;
   }
 
   generateSkin() {
@@ -26,12 +26,12 @@ class Enemy {
   }
 
   moveLeft() {
-    // Идём влево.
-    this.position -= 1;
+    this.position -= 1
   }
 
-  die() {
-    this.position = '?';
+
+  die(trackLength) {
+    this.position = trackLength;
     console.log('🎉Enemy is dead!🎊');
   }
 }
