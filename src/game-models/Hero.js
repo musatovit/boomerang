@@ -1,9 +1,11 @@
 // Наш герой.
 
 class Hero {
-  constructor(position = 1) {
-    this.skin = '🤠'; // можете использовать любые emoji '💃'
+  constructor(position) {
+    this.skin = '🦔'; 
     this.position = position;
+    this.score = 0;
+    this.record = 0;
   }
 
   moveLeft() {

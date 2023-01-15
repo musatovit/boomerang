@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   user.init({
     name: {
-    type: Sequelize.TEXT,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   score: {
-    type: Sequelize.INTEGER,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
 }, {

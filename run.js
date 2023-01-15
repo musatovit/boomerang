@@ -1,7 +1,7 @@
 // Основной файл.
 // Запускает игру.
 const Game = require('./src/Game');
-const DB = require('./DB/models');
+const db = require('./db/models');
 const { Sequelize } = require('sequelize');
 
 // Инициализация игры с настройками.

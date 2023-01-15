@@ -12,11 +12,11 @@ const View = require('./View');
 
 
 const { Sequelize, sequelize, user } = require('../db/models');
-const DB = require('../DB/models');
+const db = require('../db/models');
 
 (async () => {
   try {
-    await DB.sequelize.authenticate();
+    await db.sequelize.authenticate();
     console.log('Connection successfully.');
   } catch (error) {
     console.error(error);
@@ -26,16 +26,13 @@ const DB = require('../DB/models');
 
 
 class Game {
-  constructor({ trackLength, count = 0, name  }) {
+  constructor({ trackLength}) {
     this.trackLength = trackLength;
     this.hero = new Hero(); // Герою можно аргументом передать бумеранг.
     this.enemy = new Enemy();
     this.view = new View();
     this.track = [];
     this.regenerateTrack();
-    this.count= count
-    this.name= name;
-
   }
 
   regenerateTrack() {
@@ -46,15 +43,15 @@ class Game {
   }
 
   async name() {
-    const res = await DB.user.findOrCreate({
+    const res = await db.user.findOrCreate({
       where: { name: `${process.argv[2]}` },
-      defaults: { user: this.hero.score },
+      defaults: { score: this.hero.score },
     });
     return res;
   }
 
   async update() {
-    const result = await DB.user.update(
+    const result = await db.user.update(
       { score: this.hero.score }, 
       { where: { name: `${process.argv[2]}` } }, 
     );
