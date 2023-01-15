@@ -5,6 +5,8 @@ class Hero {
     this.skin = '🤠'; // можете использовать любые emoji '💃'
     this.position = position;
     this.boomerang = boomerang
+        this.score = 0;
+    this.record = 0;
   }
 
   moveLeft() {

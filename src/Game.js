@@ -13,6 +13,21 @@ const sound = require('play-sound')((opts = {}));
 // Основной класс игры.
 // Тут будут все настройки, проверки, запуск.
 
+
+const { Sequelize, sequelize, user } = require('../db/models');
+const db = require('../db/models');
+
+(async () => {
+  try {
+    await db.sequelize.authenticate();
+    console.log('Connection successfully.');
+  } catch (error) {
+    console.error(error);
+  }
+})();
+
+
+
 class Game {
   constructor({ trackLength, position}) {
     this.trackLength = trackLength;
@@ -33,6 +48,24 @@ class Game {
     this.track[this.hero.boomerang.position] = this.hero.boomerang.skin
 
   }
+
+  async name() {
+    const res = await db.user.findOrCreate({
+      where: { name: `${process.argv[2]}` },
+      defaults: { score: this.hero.score },
+    });
+    return res;
+  }
+
+  async update() {
+    const result = await db.user.update(
+      { score: this.hero.score }, 
+      { where: { name: `${process.argv[2]}` } }, 
+    );
+    return result;
+  }
+
+
 
   check() {
     if (this.hero.position === this.enemy.position) {
@@ -62,6 +95,7 @@ class Game {
       this.enemy.moveLeft()
       this.check();
       this.regenerateTrack();
+      this.enemy. generateSkin()
       this.view.render(this.track);
     }, 100);
   }
