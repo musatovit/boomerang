@@ -1,3 +1,4 @@
+const player = require('play-sound')(opts = {})
 
 class Enemy {
   constructor(trackLength) {
@@ -16,6 +17,9 @@ class Enemy {
 
 
   die(trackLength) {
+    player.play('src/sounds/kill.wav',err => {
+      if (err) console.log(err)
+    })
     this.position = trackLength;
     this.generateSkin();
     console.log('🎉Enemy is dead!🎊');

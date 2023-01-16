@@ -1,17 +1,17 @@
 // Импортируем всё необходимое.
 // Или можно не импортировать,
 // а передавать все нужные объекты прямо из run.js при инициализации new Game().
-
 const Hero = require('./game-models/Hero');
 const Enemy = require('./game-models/Enemy');
 const View = require('./View');
 const Rule = require('./keyboard')
 const Boomerang = require('./game-models/Boomerang')
-const sound = require('play-sound')((opts = {}));
+const player = require('play-sound')(opts = {})
 
 
-//const { Sequelize, sequelize, user } = require('../db/models');
-//const db = require('../db/models');
+
+const { Sequelize, sequelize, user } = require('../db/models');
+const db = require('../db/models');
 
 // (async () => {
 //   try {
@@ -44,13 +44,13 @@ class Game {
 
   }
 
-  // async name() {
-  //   const res = await db.user.findOrCreate({
-  //     where: { name: `${process.argv[2]}` },
-  //     defaults: { score: this.hero.score },
-  //   });
-  //   return res;
-  // }
+  async name() {
+    const res = await db.user.findOrCreate({
+      where: { name: `${process.argv[2]}`,
+      score: this.hero.score },
+    });
+    return res;
+  }
   //
   // async update() {
   //   const result = await db.user.update(
@@ -62,9 +62,13 @@ class Game {
 
 
 
-  check() {
+  async check() {
     if (this.hero.position === this.enemy.position) {
+      await player.play('src/sounds/died.wav',err => {
+        if (err) console.log(err)
+      })
       this.hero.skin = '💀'
+      await this.name()
       this.hero.die();
     }
 
@@ -85,9 +89,9 @@ class Game {
 
   play() {
     this.rule.runInteractiveConsole()
-    sound.play('src/sounds/mortal_kombat_fight.mp3', err => {
-      if (err) console.log(err);
-    });
+    player.play('src/sounds/start.mp3',err => {
+      if (err) console.log(err)
+    })
     setInterval(() => {
       // Let's play!
       this.enemy.moveLeft()
@@ -95,6 +99,7 @@ class Game {
       this.regenerateTrack();
       this.view.render(this.track, this.hero);
     }, 75);
+
   }
 }
 
