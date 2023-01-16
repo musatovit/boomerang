@@ -3,7 +3,7 @@ const c = require('ansi-colors');
 
 class View {
   render(track, hero) {
-    const yourTeamName = 'Dima,Pasha,Kirill,Ira';
+    const yourTeamName = 'Dima, Pasha, Kirill, Ira';
 
     // Тут всё рисуем.
     console.clear();
@@ -17,7 +17,6 @@ class View {
     console.log('\n');
     console.log('🌳'.repeat(track.length));
     console.log('\n');
-    console.log(c.bold.red(`Твой результат: ${hero.score}`));
     console.log(c.bold.yellow(`Created by "${yourTeamName}" with love`));
   }
 }
